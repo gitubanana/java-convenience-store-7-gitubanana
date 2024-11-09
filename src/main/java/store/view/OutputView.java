@@ -1,19 +1,35 @@
 package store.view;
 
-import static store.constant.OutputMessage.NEW_LINE;
-import static store.constant.OutputMessage.NO_QUANTITY;
-import static store.constant.OutputMessage.PRODUCT_FORMAT;
-import static store.constant.OutputMessage.PROMOTION_PRODUCT_FORMAT;
-import static store.constant.OutputMessage.QUANTITY_FORMAT;
+import static store.constant.OutputInfo.BUY_COUNT_WITHOUT_PROMOTION_QUESTION;
+import static store.constant.OutputInfo.FREE_GETTABLE_COUNT_QUESTION;
+import static store.constant.OutputInfo.NEW_LINE;
+import static store.constant.OutputInfo.NO_QUANTITY;
+import static store.constant.OutputInfo.PRODUCT_FORMAT;
+import static store.constant.OutputInfo.PROMOTION_PRODUCT_FORMAT;
+import static store.constant.OutputInfo.QUANTITY_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_AMOUNT_OF_PAY_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_FREE_PRODUCT_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_FREE_START_MESSAGE;
+import static store.constant.OutputInfo.RECEIPT_MEMBERSHIP_DISCOUNT_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_PAY_START_MESSAGE;
+import static store.constant.OutputInfo.RECEIPT_PROMOTION_DISCOUNT_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_PURCHASE_INFO_FORMAT;
+import static store.constant.OutputInfo.RECEIPT_PURCHASE_INFO_START_MESSAGE;
+import static store.constant.OutputInfo.RECEIPT_START_MESSAGE;
+import static store.constant.OutputInfo.RECEIPT_TOTAL_PRICE_FORMAT;
 
 import java.text.NumberFormat;
+import store.model.order.Order;
 import store.model.product.Product;
 import store.model.product.Products;
 import store.model.product.PromotionProduct;
 import store.model.product.PromotionProducts;
+import store.model.receipt.PurchaseInfo;
+import store.model.receipt.PurchaseInfos;
+import store.model.receipt.Receipt;
 
 public class OutputView {
-    public static final NumberFormat numberFormat = NumberFormat.getInstance();
+    public static final NumberFormat number = NumberFormat.getInstance();
 
     public static void println(String message) {
         System.out.printf(message);
@@ -25,7 +41,7 @@ public class OutputView {
             System.out.printf(
                     PRODUCT_FORMAT,
                     product.getName(),
-                    numberFormat.format(product.getPrice()),
+                    number.format(product.getPrice()),
                     getQuantityMessage(product.getQuantity())
             );
         }
@@ -36,18 +52,27 @@ public class OutputView {
             System.out.printf(
                     PROMOTION_PRODUCT_FORMAT,
                     promotionProduct.getName(),
-                    numberFormat.format(promotionProduct.getPrice()),
+                    number.format(promotionProduct.getPrice()),
                     getQuantityMessage(promotionProduct.getQuantity()),
                     promotionProduct.getPromotionName()
             );
         }
     }
 
-    private static String getQuantityMessage(int quantity) {
+    private static String getQuantityMessage(final int quantity) {
         if (quantity == 0) {
             return NO_QUANTITY;
         }
 
         return String.format(QUANTITY_FORMAT, quantity);
     }
+
+    public static void printQuestionToFreeGettableCount(Order order, final int freeGettableCount) {
+        System.out.printf(
+                FREE_GETTABLE_COUNT_QUESTION,
+                order.getProductName(),
+                freeGettableCount
+        );
+    }
+
 }

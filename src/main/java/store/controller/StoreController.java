@@ -35,6 +35,9 @@ public class StoreController {
         while (true) {
             printWelcomeAndAllProducts(store);
             Orders orders = getOrders();
+            Orders orders = readAvailableOrders(store);
+
+            readAnswerToFreeGettableCount(store, orders);
         }
     }
 
@@ -56,11 +59,8 @@ public class StoreController {
         OutputView.printPromotionProducts(store.getPromotionProducts());
     }
 
-    private Orders getOrders() {
     private Orders readAvailableOrders(Store store) {
         return Task.retryTillNoException(() -> {
-            OutputView.println(MAY_I_TAKE_YOUR_ORDER.getMessage());
-            return new Orders(InputView.readOrders());
             OutputView.println(MAY_I_TAKE_YOUR_ORDER);
             Orders orders = new Orders(InputView.readOrders());
 
@@ -71,5 +71,26 @@ public class StoreController {
         });
     }
         });
+
+    private void readAnswerToFreeGettableCount(Store store, Orders orders) {
+        for (Order order : orders.toList()) {
+            final int freeGettableCount = store.getFreeGettableCount(order);
+            if (freeGettableCount == 0) {
+                continue;
+            }
+
+            Answer answer = Task.retryTillNoException(() -> {
+                OutputView.printQuestionToFreeGettableCount(order, freeGettableCount);
+                return InputView.readAnswer();
+            });
+
+            if (answer == NO) {
+                continue;
+            }
+
+            order.addBuyCount(freeGettableCount);
+        }
+    }
+
     }
 }

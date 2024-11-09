@@ -53,4 +53,17 @@ public class Store {
         }
     }
 
+    public int getFreeGettableCount(Order order) {
+        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        if (!isAvailable(promotionProduct)) {
+            return 0;
+        }
+
+        return promotionProduct.getFreeGettableCount(order.getBuyCount());
+    }
+
+    private boolean isAvailable(PromotionProduct promotionProduct) {
+        return promotionProduct != null && promotionProduct.isAvailable();
+    }
+
 }
