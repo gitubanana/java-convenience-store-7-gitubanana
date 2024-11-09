@@ -70,7 +70,6 @@ public class StoreController {
             return orders;
         });
     }
-        });
 
     private void readAnswerToFreeGettableCount(Store store, Orders orders) {
         for (Order order : orders.toList()) {
@@ -92,5 +91,24 @@ public class StoreController {
         }
     }
 
+    private void readAnswerToBuyProductsWithoutPromotion(Store store, Orders orders) {
+        for (Order order : orders.toList()) {
+            final int buyCountWithoutPromotion = store.getBuyCountWithoutPromotion(order);
+            if (buyCountWithoutPromotion == 0) {
+                continue;
+            }
+
+            Answer answer = Task.retryTillNoException(() -> {
+                OutputView.printQuestionToBuyCountWithoutPromotion(order, buyCountWithoutPromotion);
+                return InputView.readAnswer();
+            });
+
+            if (answer == YES) {
+                continue;
+            }
+
+            order.subBuyCount(buyCountWithoutPromotion);
+        }
+    }
     }
 }

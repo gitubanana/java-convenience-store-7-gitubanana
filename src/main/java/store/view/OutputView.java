@@ -63,7 +63,6 @@ public class OutputView {
         if (quantity == 0) {
             return NO_QUANTITY;
         }
-
         return String.format(QUANTITY_FORMAT, quantity);
     }
 
@@ -72,6 +71,14 @@ public class OutputView {
                 FREE_GETTABLE_COUNT_QUESTION,
                 order.getProductName(),
                 freeGettableCount
+        );
+    }
+
+    public static void printQuestionToBuyCountWithoutPromotion(Order order, final int buyCountWithoutPromotion) {
+        System.out.printf(
+                BUY_COUNT_WITHOUT_PROMOTION_QUESTION,
+                order.getProductName(),
+                buyCountWithoutPromotion
         );
     }
 

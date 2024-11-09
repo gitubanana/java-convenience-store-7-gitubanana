@@ -66,4 +66,18 @@ public class Store {
         return promotionProduct != null && promotionProduct.isAvailable();
     }
 
+    public int getBuyCountWithoutPromotion(Order order) {
+        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        if (!isAvailable(promotionProduct)) {
+            return 0;
+        }
+
+        if (promotionProduct.getQuantity() >= order.getBuyCount()) {
+            return 0;
+        }
+
+        int promotionEffectCount = promotionProduct.getPromotionEffectCount(promotionProduct.getQuantity());
+        return order.getBuyCount() - promotionEffectCount;
+    }
+
 }
