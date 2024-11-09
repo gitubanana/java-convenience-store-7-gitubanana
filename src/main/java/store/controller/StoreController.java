@@ -110,5 +110,15 @@ public class StoreController {
             order.subBuyCount(buyCountWithoutPromotion);
         }
     }
+
+    private boolean askMembershipDiscount() {
+        Answer answer = Task.retryTillNoException(() -> {
+            OutputView.println(MEMBERSHIP_DISCOUNT);
+            return InputView.readAnswer();
+        });
+
+        return answer == YES;
+    }
+
     }
 }
