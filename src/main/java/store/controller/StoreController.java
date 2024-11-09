@@ -41,6 +41,9 @@ public class StoreController {
             Receipt receipt = new Receipt(askMembershipDiscount(), sellAllProducts(store, orders));
 
             OutputView.printReceipt(receipt);
+            if (noMoreOrders()) {
+                break;
+            }
         }
     }
 
@@ -123,6 +126,14 @@ public class StoreController {
         return answer == YES;
     }
 
+    private boolean noMoreOrders() {
+        Answer answer = Task.retryTillNoException(() -> {
+            OutputView.println(WANNA_BUY_MORE);
+            return InputView.readAnswer();
+        });
+
+        return answer == NO;
+    }
 
     private PurchaseInfos sellAllProducts(Store store, Orders orders) {
         List<PurchaseInfo> purchaseInfos = new ArrayList<>(orders.toList().size());
