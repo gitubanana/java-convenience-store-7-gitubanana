@@ -1,4 +1,4 @@
-package store.model;
+package store.model.promotion;
 
 import static store.constant.ErrorMessage.INVALID_PERIOD;
 
