@@ -1,9 +1,9 @@
 package store.model.product;
 
 public class Product {
-    private final String name;
-    private final int price;
-    private int quantity;
+    protected final String name;
+    protected final int price;
+    protected int quantity;
 
     public Product(String name, int price, int quantity) {
         this.name = name;

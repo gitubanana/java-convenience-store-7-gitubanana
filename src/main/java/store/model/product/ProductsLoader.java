@@ -1,10 +1,11 @@
 package store.model.product;
 
-import static store.constant.FileInfo.NO_PROMOTION;
-import static store.constant.FileInfo.PRODUCTS_DELIMITER;
+import static store.constant.StoreInfo.NO_PROMOTION;
+import static store.constant.StoreInfo.PRODUCTS_DELIMITER;
 
 import java.util.ArrayList;
 import java.util.List;
+import store.model.promotion.Promotions;
 import store.util.Converter;
 import store.util.FileLines;
 import store.util.Spliter;
@@ -14,7 +15,7 @@ public class ProductsLoader {
     private final List<Product> products;
     private final List<PromotionProduct> promotionProducts;
 
-    public ProductsLoader(String file) {
+    public ProductsLoader(String file, Promotions promotions) {
         FileLines fileLines = new FileLines(file);
         fileLines.nextLine();
 
@@ -26,12 +27,12 @@ public class ProductsLoader {
                 break;
             }
 
-            addProduct(line);
+            addProduct(line, promotions);
         }
         addProductsOnlyInPromotionProducts();
     }
 
-    private void addProduct(String line) {
+    private void addProduct(String line, Promotions promotions) {
         Spliter spliter = new Spliter(line, PRODUCTS_DELIMITER);
         String name = spliter.nextToken();
         int price = Converter.toInteger(spliter.nextToken());
@@ -43,7 +44,7 @@ public class ProductsLoader {
             return;
         }
 
-        promotionProducts.add(new PromotionProduct(name, price, quantity, promotionName));
+        promotionProducts.add(new PromotionProduct(name, price, quantity, promotions.getNameWith(promotionName)));
     }
 
     private void addProductsOnlyInPromotionProducts() {

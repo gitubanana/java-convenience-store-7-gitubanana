@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import store.model.order.Order;
 
 public class Products {
     private final Map<String, Product> productByName;
@@ -21,6 +22,10 @@ public class Products {
 
     public Product getNameWith(String toFind) {
         return productByName.get(toFind);
+    }
+
+    public Product getCorrespondingTo(Order order) {
+        return productByName.get(order.getProductName());
     }
 
     public List<Product> toList() {

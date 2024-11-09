@@ -1,12 +1,10 @@
 package store.model.promotion;
 
-import static store.constant.FileInfo.PROMOTIONS_DATE_FORMAT;
-import static store.constant.FileInfo.PROMOTIONS_DELIMITER;
+import static store.constant.StoreInfo.PROMOTIONS_DATE_FORMAT;
+import static store.constant.StoreInfo.PROMOTIONS_DELIMITER;
 
 import java.util.ArrayList;
 import java.util.List;
-import store.model.FreePolicy;
-import store.model.Period;
 import store.util.Converter;
 import store.util.FileLines;
 import store.util.Spliter;
