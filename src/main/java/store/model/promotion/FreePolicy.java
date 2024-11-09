@@ -1,4 +1,4 @@
-package store.model;
+package store.model.promotion;
 
 import static store.constant.ErrorMessage.BUY_COUNT_NOT_POSITIVE;
 import static store.constant.ErrorMessage.GET_COUNT_NOT_POSITIVE;
@@ -32,7 +32,6 @@ public class FreePolicy {
     }
 
     // customerBuyCount에서 더 증정할 수 있는 개수 구하기
-    // TODO: customerBuyCount가 양수가 아니라면? (0이라면 DivisionByZero예외 발생)
     public int calculateGettableCount(final int customerBuyCount) {
         final int freeUnit = buyCount + getCount;
         final int toGetDiscount = customerBuyCount % freeUnit;
@@ -58,5 +57,12 @@ public class FreePolicy {
         }
 
         return freeCount;
+    }
+
+    public int calculateFreePolicyEffectCount(final int customerBuyCount) {
+        final int freeUnit = buyCount + getCount;
+        final int discountedCount = customerBuyCount / freeUnit;
+
+        return freeUnit * discountedCount;
     }
 }

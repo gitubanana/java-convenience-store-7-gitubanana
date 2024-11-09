@@ -1,8 +1,6 @@
 package store.model.promotion;
 
 import camp.nextstep.edu.missionutils.DateTimes;
-import store.model.FreePolicy;
-import store.model.Period;
 
 public class Promotion {
     private final String name;
@@ -23,11 +21,15 @@ public class Promotion {
         return period.includes(DateTimes.now());
     }
 
-    public int getFreeCountIn(int buyCount) {
+    public int getFreeCountIn(final int buyCount) {
         return freePolicy.calculateFreeCountIn(buyCount);
     }
 
-    public int getGettableFreeCount(int buyCount) {
-        return freePolicy.calculateFreeCountIn(buyCount);
+    public int getFreeGettableCount(final int buyCount) {
+        return freePolicy.calculateGettableCount(buyCount);
+    }
+
+    public int getFreePolicyEffectCount(final int buyCount) {
+        return freePolicy.calculateFreePolicyEffectCount(buyCount);
     }
 }
