@@ -1,6 +1,7 @@
 package store.view;
 
 import static store.constant.ErrorMessage.INVALID_ORDER_FORMAT;
+import static store.constant.ErrorMessage.WRONG_INPUT;
 import static store.constant.OrderInfo.ORDER_DELIMITER;
 import static store.constant.OrderInfo.ORDER_PATTERN;
 import static store.constant.OrderInfo.PRODUCT_COUNT_GROUP;
@@ -10,6 +11,7 @@ import camp.nextstep.edu.missionutils.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
+import store.constant.Answer;
 import store.model.order.Order;
 import store.util.Spliter;
 
@@ -33,5 +35,13 @@ public class InputView {
         }
 
         return orders;
+    }
+
+    public static Answer readAnswer() {
+        Answer answer = Answer.getMatchingAnswer(Console.readLine());
+        if (answer == null) {
+            throw new IllegalArgumentException(WRONG_INPUT.getMessage());
+        }
+        return answer;
     }
 }
