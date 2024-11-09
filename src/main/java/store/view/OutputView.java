@@ -82,4 +82,54 @@ public class OutputView {
         );
     }
 
+    public static void printReceipt(Receipt receipt) {
+        System.out.printf(RECEIPT_START_MESSAGE);
+        printPurchaseInfos(receipt.getPurchaseInfos());
+        printFreePurchaseInfos(receipt.getPurchaseInfos());
+        printPays(receipt);
+    }
+
+    private static void printPurchaseInfos(PurchaseInfos purchaseInfos) {
+        System.out.printf(RECEIPT_PURCHASE_INFO_START_MESSAGE);
+        for (PurchaseInfo purchaseInfo : purchaseInfos.toList()) {
+            System.out.printf(
+                    RECEIPT_PURCHASE_INFO_FORMAT,
+                    purchaseInfo.getProductName(),
+                    purchaseInfo.getBuyCount(),
+                    number.format(purchaseInfo.getPrice())
+            );
+        }
+    }
+
+    private static void printFreePurchaseInfos(PurchaseInfos purchaseInfos) {
+        System.out.printf(RECEIPT_FREE_START_MESSAGE);
+        for (PurchaseInfo purchaseInfo : purchaseInfos.toDiscountedList()) {
+            System.out.printf(
+                    RECEIPT_FREE_PRODUCT_FORMAT,
+                    purchaseInfo.getProductName(),
+                    purchaseInfo.getFreeCount()
+            );
+        }
+    }
+
+    private static void printPays(Receipt receipt) {
+        System.out.printf(RECEIPT_PAY_START_MESSAGE);
+        System.out.printf(
+                RECEIPT_TOTAL_PRICE_FORMAT,
+                receipt.getTotalBuyCount(),
+                number.format(receipt.getTotalPrice())
+        );
+        System.out.printf(
+                RECEIPT_PROMOTION_DISCOUNT_FORMAT,
+                number.format(receipt.getDiscountPrice())
+        );
+        System.out.printf(
+                RECEIPT_MEMBERSHIP_DISCOUNT_FORMAT,
+                number.format(receipt.getMembershipDiscountAmount())
+        );
+        System.out.printf(
+                RECEIPT_AMOUNT_OF_PAY_FORMAT,
+                number.format(receipt.getAmountOfPay())
+        );
+    }
 }

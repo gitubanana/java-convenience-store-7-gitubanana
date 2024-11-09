@@ -34,10 +34,13 @@ public class StoreController {
 
         while (true) {
             printWelcomeAndAllProducts(store);
-            Orders orders = getOrders();
             Orders orders = readAvailableOrders(store);
 
             readAnswerToFreeGettableCount(store, orders);
+            readAnswerToBuyProductsWithoutPromotion(store, orders);
+            Receipt receipt = new Receipt(askMembershipDiscount(), sellAllProducts(store, orders));
+
+            OutputView.printReceipt(receipt);
         }
     }
 
@@ -120,5 +123,13 @@ public class StoreController {
         return answer == YES;
     }
 
+
+    private PurchaseInfos sellAllProducts(Store store, Orders orders) {
+        List<PurchaseInfo> purchaseInfos = new ArrayList<>(orders.toList().size());
+
+        for (Order order : orders.toList()) {
+            purchaseInfos.add(store.sell(order));
+        }
+        return new PurchaseInfos(purchaseInfos);
     }
 }
