@@ -80,4 +80,22 @@ public class Store {
         return order.getBuyCount() - promotionEffectCount;
     }
 
+    public PurchaseInfo sell(Order order) {
+        int freeCount = 0;
+        int remainSellCount = order.getBuyCount();
+        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+
+        if (isAvailable(promotionProduct)) {
+            final int promotionSellCount = Math.min(remainSellCount, promotionProduct.getQuantity());
+
+            freeCount = promotionProduct.getFreeCountIn(promotionSellCount);
+            promotionProduct.sell(promotionSellCount);
+            remainSellCount -= promotionSellCount;
+        }
+
+        Product product = products.getCorrespondingTo(order);
+        product.sell(remainSellCount);
+
+        return new PurchaseInfo(order, product.getPrice(), freeCount);
+    }
 }
