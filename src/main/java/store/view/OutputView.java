@@ -29,7 +29,7 @@ import store.model.receipt.PurchaseInfos;
 import store.model.receipt.Receipt;
 
 public class OutputView {
-    public static final NumberFormat number = NumberFormat.getInstance();
+    public static final NumberFormat NUMBER = NumberFormat.getInstance();
 
     public static void println(String message) {
         System.out.printf(message);
@@ -41,7 +41,7 @@ public class OutputView {
             System.out.printf(
                     PRODUCT_FORMAT,
                     product.getName(),
-                    number.format(product.getPrice()),
+                    NUMBER.format(product.getPrice()),
                     getQuantityMessage(product.getQuantity())
             );
         }
@@ -52,7 +52,7 @@ public class OutputView {
             System.out.printf(
                     PROMOTION_PRODUCT_FORMAT,
                     promotionProduct.getName(),
-                    number.format(promotionProduct.getPrice()),
+                    NUMBER.format(promotionProduct.getPrice()),
                     getQuantityMessage(promotionProduct.getQuantity()),
                     promotionProduct.getPromotionName()
             );
@@ -96,7 +96,7 @@ public class OutputView {
                     RECEIPT_PURCHASE_INFO_FORMAT,
                     purchaseInfo.getProductName(),
                     purchaseInfo.getBuyCount(),
-                    number.format(purchaseInfo.getPrice())
+                    NUMBER.format(purchaseInfo.getPrice())
             );
         }
     }
@@ -124,28 +124,28 @@ public class OutputView {
         System.out.printf(
                 RECEIPT_TOTAL_PRICE_FORMAT,
                 receipt.getTotalBuyCount(),
-                number.format(receipt.getTotalPrice())
+                NUMBER.format(receipt.getTotalPrice())
         );
     }
 
     private static void printPromotionDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_PROMOTION_DISCOUNT_FORMAT,
-                number.format(receipt.getDiscountPrice())
+                NUMBER.format(receipt.getDiscountPrice())
         );
     }
 
     private static void printMemberShipDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_MEMBERSHIP_DISCOUNT_FORMAT,
-                number.format(receipt.getMembershipDiscountAmount())
+                NUMBER.format(receipt.getMembershipDiscountAmount())
         );
     }
 
     private static void printAmountOfPay(Receipt receipt) {
         System.out.printf(
                 RECEIPT_AMOUNT_OF_PAY_FORMAT,
-                number.format(receipt.getAmountOfPay())
+                NUMBER.format(receipt.getAmountOfPay())
         );
     }
 }
