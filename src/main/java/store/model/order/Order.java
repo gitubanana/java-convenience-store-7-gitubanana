@@ -3,8 +3,8 @@ package store.model.order;
 import static store.constant.ErrorMessage.WRONG_INPUT;
 
 public class Order {
-    private final String productName;
-    private int buyCount;
+    protected final String productName;
+    protected int buyCount;
 
     public Order(String productName, final int buyCount) {
         validateNotNegative(buyCount);

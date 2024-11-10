@@ -16,8 +16,8 @@ public class Receipt {
         return purchaseInfos;
     }
 
-    public int getTotalPrice() {
-        return purchaseInfos.getTotalPrice();
+    public int getTotalPriceWithoutDiscount() {
+        return purchaseInfos.getTotalPriceWithoutDiscount();
     }
 
     public int getDiscountPrice() {
@@ -36,7 +36,7 @@ public class Receipt {
     }
 
     public int getAmountOfPay() {
-        return getTotalPrice()
+        return getTotalPriceWithoutDiscount()
                 - getDiscountPrice()
                 - getMembershipDiscountAmount();
     }

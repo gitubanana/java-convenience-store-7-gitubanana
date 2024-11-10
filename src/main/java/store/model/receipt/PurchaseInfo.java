@@ -24,6 +24,14 @@ public class PurchaseInfo extends Order {
         return freeCount;
     }
 
+    public int getTotalPriceWithoutDiscount() {
+        return buyCount * price;
+    }
+
+    public int getDiscountPrice() {
+        return freeCount * price;
+    }
+
     public boolean isNotDiscounted() {
         return freeCount == 0;
     }

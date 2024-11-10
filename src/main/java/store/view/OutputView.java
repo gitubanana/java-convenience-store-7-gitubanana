@@ -96,7 +96,7 @@ public class OutputView {
                     RECEIPT_PURCHASE_INFO_FORMAT,
                     purchaseInfo.getProductName(),
                     purchaseInfo.getBuyCount(),
-                    NUMBER.format(purchaseInfo.getPrice())
+                    NUMBER.format(purchaseInfo.getTotalPriceWithoutDiscount())
             );
         }
     }
@@ -124,7 +124,7 @@ public class OutputView {
         System.out.printf(
                 RECEIPT_TOTAL_PRICE_FORMAT,
                 receipt.getTotalBuyCount(),
-                NUMBER.format(receipt.getTotalPrice())
+                NUMBER.format(receipt.getTotalPriceWithoutDiscount())
         );
     }
 

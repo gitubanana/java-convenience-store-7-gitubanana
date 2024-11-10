@@ -25,22 +25,20 @@ public class PurchaseInfos {
                 .sum();
     }
 
-    public int getTotalPrice() {
+    public int getTotalPriceWithoutDiscount() {
         return purchaseInfos.stream()
-                .mapToInt(purchaseInfo -> purchaseInfo.getBuyCount() * purchaseInfo.getPrice())
+                .mapToInt(PurchaseInfo::getTotalPriceWithoutDiscount)
                 .sum();
     }
 
     public int getDiscountedPrice() {
         return toDiscountedList().stream()
-                .mapToInt(purchaseInfo -> purchaseInfo.getFreeCount() * purchaseInfo.getPrice())
+                .mapToInt(PurchaseInfo::getDiscountPrice)
                 .sum();
     }
 
     public int getNotDiscountedPrice() {
-        return purchaseInfos.stream()
-                .filter(PurchaseInfo::isNotDiscounted)
-                .mapToInt(purchaseInfo -> purchaseInfo.getBuyCount() * purchaseInfo.getPrice())
-                .sum();
+        return getTotalPriceWithoutDiscount()
+                - getDiscountedPrice();
     }
 }
