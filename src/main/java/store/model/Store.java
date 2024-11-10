@@ -27,23 +27,27 @@ public class Store {
         return promotionProducts;
     }
 
+    private static boolean isAvailable(PromotionProduct promotionProduct) {
+        return promotionProduct != null && promotionProduct.isAvailable();
+    }
+
     public void checkAvailability(Order order) {
         checkProductName(order);
-        checkStock(order);
+        checkQuantity(order);
     }
 
     private void checkProductName(Order order) {
         Product product = products.getCorrespondingTo(order);
+
         if (product == null) {
             throw new IllegalArgumentException(CANNOT_FIND_PRODUCT.getMessage());
         }
     }
 
-    private void checkStock(Order order) {
+    private void checkQuantity(Order order) {
         Product product = products.getCorrespondingTo(order);
         PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
         int totalQuantity = product.getQuantity();
-
         if (isAvailable(promotionProduct)) {
             totalQuantity += promotionProduct.getQuantity();
         }
@@ -55,47 +59,72 @@ public class Store {
 
     public int getFreeGettableCount(Order order) {
         PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+
         if (!isAvailable(promotionProduct)) {
             return 0;
         }
-
         return promotionProduct.getFreeGettableCount(order.getBuyCount());
-    }
-
-    private boolean isAvailable(PromotionProduct promotionProduct) {
-        return promotionProduct != null && promotionProduct.isAvailable();
     }
 
     public int getBuyCountWithoutPromotion(Order order) {
         PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
-        if (!isAvailable(promotionProduct)) {
+
+        if (!isAvailable(promotionProduct) || order.getBuyCount() <= promotionProduct.getQuantity()) {
             return 0;
         }
-
-        if (promotionProduct.getQuantity() >= order.getBuyCount()) {
-            return 0;
-        }
-
-        int promotionEffectCount = promotionProduct.getPromotionEffectCount(promotionProduct.getQuantity());
-        return order.getBuyCount() - promotionEffectCount;
+        return order.getBuyCount() - promotionProduct.getPromotionEffectCount();
     }
 
     public PurchaseInfo sell(Order order) {
-        int freeCount = 0;
-        int remainSellCount = order.getBuyCount();
-        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        Seller seller = new Seller(
+                order.getBuyCount(),
+                products.getCorrespondingTo(order),
+                promotionProducts.getCorrespondingTo(order)
+        );
 
-        if (isAvailable(promotionProduct)) {
+        seller.sell();
+        return new PurchaseInfo(order, seller.getPrice(), seller.getFreeCount());
+    }
+
+    private static class Seller {
+        private int freeCount;
+        private int remainSellCount;
+        private final Product product;
+        private final PromotionProduct promotionProduct;
+
+        public Seller(final int remainSellCount, Product product, PromotionProduct promotionProduct) {
+            this.remainSellCount = remainSellCount;
+            this.product = product;
+            this.promotionProduct = promotionProduct;
+        }
+
+        public void sell() {
+            sellPromotionProduct();
+            sellProduct();
+        }
+
+        private void sellPromotionProduct() {
+            if (!isAvailable(promotionProduct)) {
+                return;
+            }
+
             final int promotionSellCount = Math.min(remainSellCount, promotionProduct.getQuantity());
 
             freeCount = promotionProduct.getFreeCountIn(promotionSellCount);
-            promotionProduct.sell(promotionSellCount);
             remainSellCount -= promotionSellCount;
+            promotionProduct.sell(promotionSellCount);
         }
 
-        Product product = products.getCorrespondingTo(order);
-        product.sell(remainSellCount);
+        private void sellProduct() {
+            product.sell(remainSellCount);
+        }
 
-        return new PurchaseInfo(order, product.getPrice(), freeCount);
+        public int getFreeCount() {
+            return freeCount;
+        }
+
+        public int getPrice() {
+            return product.getPrice();
+        }
     }
 }
