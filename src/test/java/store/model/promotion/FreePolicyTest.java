@@ -1,4 +1,4 @@
-package store.model;
+package store.model.promotion;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import store.model.promotion.FreePolicy;
 
 @DisplayName("== FreePolicy 테스트 ==")
 public class FreePolicyTest {
@@ -83,6 +82,32 @@ public class FreePolicyTest {
                     Arguments.of(1, 2, 5, 3),
                     Arguments.of(1, 2, 6, 4),
                     Arguments.of(1, 2, 7, 4)
+            );
+        }
+
+        @ParameterizedTest
+        @DisplayName("고객이 구매한 개수를 얼만큼 프로모션 할인에 영향을 받았는지 구할 수 있다.")
+        @MethodSource("getCalculateFreePolicyEffectCountArguments")
+        void 프로모션_할인_영향_받는_개수(final int buyCount, final int getCount, final int customerBuyCount, final int expected) {
+            FreePolicy freePolicy = new FreePolicy(buyCount, getCount);
+
+            assertThat(freePolicy.calculateFreePolicyEffectCount(customerBuyCount))
+                    .isEqualTo(expected);
+        }
+
+        static Stream<Arguments> getCalculateFreePolicyEffectCountArguments() {
+            return Stream.of(
+                    Arguments.of(1, 1, 1, 0),
+                    Arguments.of(1, 1, 2, 2),
+                    Arguments.of(1, 1, 3, 2),
+                    Arguments.of(1, 1, 4, 4),
+                    Arguments.of(1, 2, 1, 0),
+                    Arguments.of(1, 2, 2, 0),
+                    Arguments.of(1, 2, 3, 3),
+                    Arguments.of(1, 2, 4, 3),
+                    Arguments.of(2, 1, 1, 0),
+                    Arguments.of(2, 1, 2, 0),
+                    Arguments.of(2, 1, 3, 3)
             );
         }
     }
