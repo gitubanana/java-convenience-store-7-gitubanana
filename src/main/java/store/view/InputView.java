@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import store.constant.Answer;
 import store.model.order.Order;
+import store.util.Converter;
 import store.util.Spliter;
 
 public class InputView {
@@ -20,25 +21,30 @@ public class InputView {
         Spliter spliter = new Spliter(Console.readLine(), ORDER_DELIMITER);
         List<Order> orders = new ArrayList<>();
 
-        while (spliter.hasMoreToken()) {
-            Matcher matcher = ORDER_PATTERN.matcher(spliter.nextToken());
-            if (!matcher.matches()) {
-                throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
-            }
+        while (spliter.hasMoreTokens()) {
+            String nextToken = spliter.nextToken();
 
-            orders.add(
-                    new Order(
-                            matcher.group(PRODUCT_NAME_GROUP),
-                            Integer.parseInt(matcher.group(PRODUCT_COUNT_GROUP))
-                    )
-            );
+            orders.add(makeOrder(nextToken));
+        }
+        return orders;
+    }
+
+    private static Order makeOrder(String order) {
+        Matcher matcher = ORDER_PATTERN.matcher(order);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(INVALID_ORDER_FORMAT.getMessage());
         }
 
-        return orders;
+        return new Order(
+                matcher.group(PRODUCT_NAME_GROUP),
+                Converter.toInteger(matcher.group(PRODUCT_COUNT_GROUP))
+        );
     }
 
     public static Answer readAnswer() {
         Answer answer = Answer.getMatchingAnswer(Console.readLine());
+
         if (answer == null) {
             throw new IllegalArgumentException(WRONG_INPUT.getMessage());
         }

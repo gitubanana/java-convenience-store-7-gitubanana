@@ -14,7 +14,7 @@ public class Spliter {
         ));
     }
 
-    public boolean hasMoreToken() {
+    public boolean hasMoreTokens() {
         return !tokens.isEmpty();
     }
 

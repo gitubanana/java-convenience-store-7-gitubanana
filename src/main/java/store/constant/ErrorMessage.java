@@ -10,6 +10,8 @@ public enum ErrorMessage {
     BUY_COUNT_NOT_POSITIVE("증정 조건이 올바르지 않습니다."),
     GET_COUNT_NOT_POSITIVE("증정 개수가 올바르지 않습니다."),
     DUPLICATED_ORDER("한 물건에 대한 주문이 중복됩니다. 한 곳에 모아서 써주세요."),
+    PRICE_NEGATIVE("가격이 음수입니다."),
+    QUANTITY_NEGATIVE("수량이 음수입니다."),
     WRONG_INPUT("잘못된 입력입니다. 다시 입력해 주세요."),
     ;
 

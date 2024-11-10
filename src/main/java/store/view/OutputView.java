@@ -114,19 +114,35 @@ public class OutputView {
 
     private static void printPays(Receipt receipt) {
         System.out.printf(RECEIPT_PAY_START_MESSAGE);
+        printTotalPrice(receipt);
+        printPromotionDiscount(receipt);
+        printMemberShipDiscount(receipt);
+        printAmountOfPay(receipt);
+    }
+
+    private static void printTotalPrice(Receipt receipt) {
         System.out.printf(
                 RECEIPT_TOTAL_PRICE_FORMAT,
                 receipt.getTotalBuyCount(),
                 number.format(receipt.getTotalPrice())
         );
+    }
+
+    private static void printPromotionDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_PROMOTION_DISCOUNT_FORMAT,
                 number.format(receipt.getDiscountPrice())
         );
+    }
+
+    private static void printMemberShipDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_MEMBERSHIP_DISCOUNT_FORMAT,
                 number.format(receipt.getMembershipDiscountAmount())
         );
+    }
+
+    private static void printAmountOfPay(Receipt receipt) {
         System.out.printf(
                 RECEIPT_AMOUNT_OF_PAY_FORMAT,
                 number.format(receipt.getAmountOfPay())

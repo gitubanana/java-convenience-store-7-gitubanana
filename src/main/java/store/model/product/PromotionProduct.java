@@ -5,7 +5,7 @@ import store.model.promotion.Promotion;
 public class PromotionProduct extends Product {
     private final Promotion promotion;
 
-    public PromotionProduct(String name, int price, int quantity, Promotion promotion) {
+    public PromotionProduct(String name, final int price, final int quantity, Promotion promotion) {
         super(name, price, quantity);
         this.promotion = promotion;
     }
@@ -20,10 +20,11 @@ public class PromotionProduct extends Product {
 
     public int getFreeGettableCount(final int buyCount) {
         final int freeGettableCount = promotion.getFreeGettableCount(buyCount);
-        if (buyCount + freeGettableCount > quantity) {
+        final int buyCountIncludingFreeCount = buyCount + freeGettableCount;
+
+        if (buyCountIncludingFreeCount > quantity) {
             return 0;
         }
-
         return freeGettableCount;
     }
 
@@ -31,7 +32,7 @@ public class PromotionProduct extends Product {
         return promotion.getFreeCountIn(buyCount);
     }
 
-    public int getPromotionEffectCount(final int buyCount) {
-        return promotion.getFreePolicyEffectCount(buyCount);
+    public int getPromotionEffectCount() {
+        return promotion.getFreePolicyEffectCount(quantity);
     }
 }

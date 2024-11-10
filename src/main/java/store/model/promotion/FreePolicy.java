@@ -39,10 +39,7 @@ public class FreePolicy {
         if (toGetDiscount < buyCount) {
             return 0;
         }
-
-        final int alreadyGotCount = toGetDiscount - buyCount;
-
-        return getCount - alreadyGotCount;
+        return getCount - (toGetDiscount - buyCount);
     }
 
     // customerBuyCount안에 몇 개가 증정되는지 구하기

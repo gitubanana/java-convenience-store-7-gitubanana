@@ -10,7 +10,6 @@ import store.util.Converter;
 import store.util.FileLines;
 import store.util.Spliter;
 
-// name,price,quantity,promotion 형식으로 읽는다.
 public class ProductsLoader {
     private final List<Product> products;
     private final List<PromotionProduct> promotionProducts;
@@ -21,29 +20,22 @@ public class ProductsLoader {
 
         products = new ArrayList<>();
         promotionProducts = new ArrayList<>();
-        while (true) {
-            String line = fileLines.nextLine();
-            if (line == null) {
-                break;
-            }
-
-            addProduct(line, promotions);
+        while (fileLines.hasMoreLines()) {
+            addProduct(new Spliter(fileLines.nextLine(), PRODUCTS_DELIMITER), promotions);
         }
         addProductsOnlyInPromotionProducts();
     }
 
-    private void addProduct(String line, Promotions promotions) {
-        Spliter spliter = new Spliter(line, PRODUCTS_DELIMITER);
+    private void addProduct(Spliter spliter, Promotions promotions) {
         String name = spliter.nextToken();
-        int price = Converter.toInteger(spliter.nextToken());
-        int quantity = Converter.toInteger(spliter.nextToken());
+        final int price = Converter.toInteger(spliter.nextToken());
+        final int quantity = Converter.toInteger(spliter.nextToken());
         String promotionName = spliter.nextToken();
 
         if (promotionName.equals(NO_PROMOTION)) {
             products.add(new Product(name, price, quantity));
             return;
         }
-
         promotionProducts.add(new PromotionProduct(name, price, quantity, promotions.getNameWith(promotionName)));
     }
 
@@ -52,8 +44,9 @@ public class ProductsLoader {
 
         promotionProducts.stream()
                 .filter(promotionProduct -> !productNames.contains(promotionProduct.getName()))
-                .forEach(promotionProduct -> products.add(
-                        new Product(promotionProduct.getName(), promotionProduct.getPrice(), 0)));
+                .forEach(promotionProduct ->
+                        products.add(new Product(promotionProduct.getName(), promotionProduct.getPrice(), 0))
+                );
     }
 
     public List<Product> getProducts() {

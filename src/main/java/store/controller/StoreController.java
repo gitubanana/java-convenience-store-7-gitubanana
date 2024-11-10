@@ -33,14 +33,7 @@ public class StoreController {
         Store store = loadFilesAndMakeStore();
 
         while (true) {
-            printWelcomeAndAllProducts(store);
-            Orders orders = readAvailableOrders(store);
-
-            readAnswerToFreeGettableCount(store, orders);
-            readAnswerToBuyProductsWithoutPromotion(store, orders);
-            Receipt receipt = new Receipt(askMembershipDiscount(), sellAllProducts(store, orders));
-
-            OutputView.printReceipt(receipt);
+            takeOrdersAndSellProducts(store);
             if (noMoreOrders()) {
                 break;
             }
@@ -56,6 +49,17 @@ public class StoreController {
                 new Products(productsLoader.getProducts()),
                 new PromotionProducts(productsLoader.getPromotionProducts())
         );
+    }
+
+    private void takeOrdersAndSellProducts(Store store) {
+        printWelcomeAndAllProducts(store);
+        Orders orders = readAvailableOrders(store);
+
+        readAnswerToFreeGettableCount(store, orders);
+        readAnswerToBuyProductsWithoutPromotion(store, orders);
+        Receipt receipt = new Receipt(askMembershipDiscount(), sellAllProducts(store, orders));
+
+        OutputView.printReceipt(receipt);
     }
 
     private void printWelcomeAndAllProducts(Store store) {
@@ -84,17 +88,17 @@ public class StoreController {
                 continue;
             }
 
-            Answer answer = Task.retryTillNoException(() -> {
-                OutputView.printQuestionToFreeGettableCount(order, freeGettableCount);
-                return InputView.readAnswer();
-            });
-
-            if (answer == NO) {
-                continue;
+            if (answerToGetFreeProducts(order, freeGettableCount) == YES) {
+                order.add(freeGettableCount);
             }
-
-            order.addBuyCount(freeGettableCount);
         }
+    }
+
+    private Answer answerToGetFreeProducts(Order order, final int freeGettableCount) {
+        return Task.retryTillNoException(() -> {
+            OutputView.printQuestionToFreeGettableCount(order, freeGettableCount);
+            return InputView.readAnswer();
+        });
     }
 
     private void readAnswerToBuyProductsWithoutPromotion(Store store, Orders orders) {
@@ -104,17 +108,17 @@ public class StoreController {
                 continue;
             }
 
-            Answer answer = Task.retryTillNoException(() -> {
-                OutputView.printQuestionToBuyCountWithoutPromotion(order, buyCountWithoutPromotion);
-                return InputView.readAnswer();
-            });
-
-            if (answer == YES) {
-                continue;
+            if (answerToBuyWithoutPromotion(order, buyCountWithoutPromotion) == NO) {
+                order.cancel(buyCountWithoutPromotion);
             }
-
-            order.subBuyCount(buyCountWithoutPromotion);
         }
+    }
+
+    private Answer answerToBuyWithoutPromotion(Order order, final int buyCountWithoutPromotion) {
+        return Task.retryTillNoException(() -> {
+            OutputView.printQuestionToBuyCountWithoutPromotion(order, buyCountWithoutPromotion);
+            return InputView.readAnswer();
+        });
     }
 
     private boolean askMembershipDiscount() {

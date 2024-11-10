@@ -14,35 +14,22 @@ public class PromotionsLoader {
 
     public PromotionsLoader(String file) {
         FileLines fileLines = new FileLines(file);
-        fileLines.nextLine(); // ignore first line
+        fileLines.nextLine();
 
         promotions = new ArrayList<>();
-        while (true) {
-            String line = fileLines.nextLine();
-            if (line == null) {
-                break;
-            }
-
-            addPromotion(line);
+        while (fileLines.hasMoreLines()) {
+            addPromotion(fileLines.nextLine());
         }
     }
 
     private void addPromotion(String line) {
         Spliter spliter = new Spliter(line, PROMOTIONS_DELIMITER);
 
-        promotions.add(
-                new Promotion(
-                        spliter.nextToken(),
-                        new FreePolicy(
-                                Converter.toInteger(spliter.nextToken()),
-                                Converter.toInteger(spliter.nextToken())
-                        ),
-                        new Period(
-                                Converter.toLocalDateTime(spliter.nextToken(), PROMOTIONS_DATE_FORMAT),
-                                Converter.toLocalDateTime(spliter.nextToken(), PROMOTIONS_DATE_FORMAT)
-                        )
-                )
-        );
+        promotions.add(new Promotion(spliter.nextToken(),
+                new FreePolicy(Converter.toInteger(spliter.nextToken()),
+                        Converter.toInteger(spliter.nextToken())),
+                new Period(Converter.toLocalDateTime(spliter.nextToken(), PROMOTIONS_DATE_FORMAT),
+                        Converter.toLocalDateTime(spliter.nextToken(), PROMOTIONS_DATE_FORMAT))));
     }
 
     public List<Promotion> getPromotions() {

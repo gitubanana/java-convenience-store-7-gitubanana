@@ -7,17 +7,13 @@ public class Order {
     private int buyCount;
 
     public Order(String productName, final int buyCount) {
-        validate(buyCount);
+        validateNotNegative(buyCount);
         this.productName = productName;
         this.buyCount = buyCount;
     }
 
-    private void validate(final int buyCount) {
-        validateNotNegative(buyCount);
-    }
-
     private void validateNotNegative(final int buyCount) {
-        if (buyCount < 0) {
+        if (buyCount < 0) { // TODO: 0도 처리? (컵라면 5개일 때 취소하면 오류)
             throw new IllegalArgumentException(WRONG_INPUT.getMessage());
         }
     }
@@ -30,11 +26,11 @@ public class Order {
         return buyCount;
     }
 
-    public void addBuyCount(final int toAdd) {
+    public void add(final int toAdd) {
         buyCount += toAdd;
     }
 
-    public void subBuyCount(final int toSub) {
+    public void cancel(final int toSub) {
         buyCount -= toSub;
     }
 }
