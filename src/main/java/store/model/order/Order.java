@@ -13,7 +13,7 @@ public class Order {
     }
 
     private void validateNotNegative(final int buyCount) {
-        if (buyCount < 0) { // TODO: 0도 처리? (컵라면 5개일 때 취소하면 오류)
+        if (buyCount < 0) {
             throw new IllegalArgumentException(WRONG_INPUT.getMessage());
         }
     }
@@ -30,7 +30,7 @@ public class Order {
         buyCount += toAdd;
     }
 
-    public void cancel(final int toSub) {
-        buyCount -= toSub;
+    public void cancel(final int toCancel) {
+        buyCount -= toCancel;
     }
 }

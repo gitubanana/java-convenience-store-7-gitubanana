@@ -37,16 +37,15 @@ public class Store {
     }
 
     private void checkProductName(Order order) {
-        Product product = products.getCorrespondingTo(order);
-
+        Product product = products.getNameWith(order.getProductName());
         if (product == null) {
             throw new IllegalArgumentException(CANNOT_FIND_PRODUCT.getMessage());
         }
     }
 
     private void checkQuantity(Order order) {
-        Product product = products.getCorrespondingTo(order);
-        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        Product product = products.getNameWith(order.getProductName());
+        PromotionProduct promotionProduct = promotionProducts.getNameWith(order.getProductName());
         int totalQuantity = product.getQuantity();
         if (isAvailable(promotionProduct)) {
             totalQuantity += promotionProduct.getQuantity();
@@ -58,7 +57,7 @@ public class Store {
     }
 
     public int getFreeGettableCount(Order order) {
-        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        PromotionProduct promotionProduct = promotionProducts.getNameWith(order.getProductName());
 
         if (!isAvailable(promotionProduct)) {
             return 0;
@@ -67,7 +66,7 @@ public class Store {
     }
 
     public int getBuyCountWithoutPromotion(Order order) {
-        PromotionProduct promotionProduct = promotionProducts.getCorrespondingTo(order);
+        PromotionProduct promotionProduct = promotionProducts.getNameWith(order.getProductName());
 
         if (!isAvailable(promotionProduct) || order.getBuyCount() <= promotionProduct.getQuantity()) {
             return 0;
@@ -78,8 +77,8 @@ public class Store {
     public PurchaseInfo sell(Order order) {
         Seller seller = new Seller(
                 order.getBuyCount(),
-                products.getCorrespondingTo(order),
-                promotionProducts.getCorrespondingTo(order)
+                products.getNameWith(order.getProductName()),
+                promotionProducts.getNameWith(order.getProductName())
         );
 
         seller.sell();

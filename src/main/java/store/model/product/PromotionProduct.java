@@ -20,9 +20,9 @@ public class PromotionProduct extends Product {
 
     public int getFreeGettableCount(final int buyCount) {
         final int freeGettableCount = promotion.getFreeGettableCount(buyCount);
-        final int buyCountIncludingFreeCount = buyCount + freeGettableCount;
+        final int buyCountIncludingFreeGettableCount = buyCount + freeGettableCount;
 
-        if (buyCountIncludingFreeCount > quantity) {
+        if (buyCountIncludingFreeGettableCount > quantity) {
             return 0;
         }
         return freeGettableCount;

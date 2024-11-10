@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import store.model.order.Order;
 
 public class PromotionProducts {
     private final Map<String, PromotionProduct> promotionProductByName;
@@ -22,10 +21,6 @@ public class PromotionProducts {
 
     public PromotionProduct getNameWith(String toFind) {
         return promotionProductByName.get(toFind);
-    }
-
-    public PromotionProduct getCorrespondingTo(Order order) {
-        return promotionProductByName.get(order.getProductName());
     }
 
     public List<PromotionProduct> toList() {

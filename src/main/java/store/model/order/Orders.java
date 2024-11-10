@@ -1,6 +1,6 @@
 package store.model.order;
 
-import static store.constant.ErrorMessage.DUPLICATED_ORDER;
+import static store.constant.ErrorMessage.WRONG_INPUT;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Orders {
     private void validateOrderNotDuplicated(List<Order> orders) {
         int distinctCount = (int) orders.stream().map(Order::getProductName).distinct().count();
         if (distinctCount != orders.size()) {
-            throw new IllegalArgumentException(DUPLICATED_ORDER.getMessage());
+            throw new IllegalArgumentException(WRONG_INPUT.getMessage());
         }
     }
 

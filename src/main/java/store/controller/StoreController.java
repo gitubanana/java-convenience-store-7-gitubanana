@@ -10,8 +10,6 @@ import static store.constant.OutputInfo.WELCOME_MESSAGE;
 import static store.constant.StoreInfo.PRODUCTS_FILE;
 import static store.constant.StoreInfo.PROMOTIONS_FILE;
 
-import java.util.ArrayList;
-import java.util.List;
 import store.constant.Answer;
 import store.model.Store;
 import store.model.order.Order;
@@ -21,7 +19,6 @@ import store.model.product.ProductsLoader;
 import store.model.product.PromotionProducts;
 import store.model.promotion.Promotions;
 import store.model.promotion.PromotionsLoader;
-import store.model.receipt.PurchaseInfo;
 import store.model.receipt.PurchaseInfos;
 import store.model.receipt.Receipt;
 import store.util.Task;
@@ -34,7 +31,7 @@ public class StoreController {
 
         while (true) {
             takeOrdersAndSellProducts(store);
-            if (noMoreOrders()) {
+            if (answerToMoreOrders() == NO) {
                 break;
             }
         }
@@ -57,7 +54,10 @@ public class StoreController {
 
         readAnswerToFreeGettableCount(store, orders);
         readAnswerToBuyProductsWithoutPromotion(store, orders);
-        Receipt receipt = new Receipt(askMembershipDiscount(), sellAllProducts(store, orders));
+        Receipt receipt = new Receipt(
+                answerToMembershipDiscount() == YES,
+                sellAllProducts(store, orders)
+        );
 
         OutputView.printReceipt(receipt);
     }
@@ -121,30 +121,25 @@ public class StoreController {
         });
     }
 
-    private boolean askMembershipDiscount() {
-        Answer answer = Task.retryTillNoException(() -> {
+    private Answer answerToMembershipDiscount() {
+        return Task.retryTillNoException(() -> {
             OutputView.println(MEMBERSHIP_DISCOUNT);
             return InputView.readAnswer();
         });
-
-        return answer == YES;
     }
 
-    private boolean noMoreOrders() {
-        Answer answer = Task.retryTillNoException(() -> {
+    private Answer answerToMoreOrders() {
+        return Task.retryTillNoException(() -> {
             OutputView.println(WANNA_BUY_MORE);
             return InputView.readAnswer();
         });
-
-        return answer == NO;
     }
 
     private PurchaseInfos sellAllProducts(Store store, Orders orders) {
-        List<PurchaseInfo> purchaseInfos = new ArrayList<>(orders.toList().size());
-
-        for (Order order : orders.toList()) {
-            purchaseInfos.add(store.sell(order));
-        }
-        return new PurchaseInfos(purchaseInfos);
+        return new PurchaseInfos(
+                orders.toList().stream()
+                        .map(store::sell)
+                        .toList()
+        );
     }
 }

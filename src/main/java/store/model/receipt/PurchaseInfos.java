@@ -27,20 +27,20 @@ public class PurchaseInfos {
 
     public int getTotalPrice() {
         return purchaseInfos.stream()
-                .mapToInt(info -> info.getBuyCount() * info.getPrice())
+                .mapToInt(purchaseInfo -> purchaseInfo.getBuyCount() * purchaseInfo.getPrice())
                 .sum();
     }
 
     public int getDiscountedPrice() {
         return toDiscountedList().stream()
-                .mapToInt(info -> info.getFreeCount() * info.getPrice())
+                .mapToInt(purchaseInfo -> purchaseInfo.getFreeCount() * purchaseInfo.getPrice())
                 .sum();
     }
 
     public int getNotDiscountedPrice() {
         return purchaseInfos.stream()
                 .filter(PurchaseInfo::isNotDiscounted)
-                .mapToInt(info -> info.getBuyCount() * info.getPrice())
+                .mapToInt(purchaseInfo -> purchaseInfo.getBuyCount() * purchaseInfo.getPrice())
                 .sum();
     }
 }
