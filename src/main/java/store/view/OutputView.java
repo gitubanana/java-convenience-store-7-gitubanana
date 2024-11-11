@@ -29,7 +29,7 @@ import store.model.receipt.PurchaseInfos;
 import store.model.receipt.Receipt;
 
 public class OutputView {
-    public static final NumberFormat NUMBER = NumberFormat.getInstance();
+    public static final NumberFormat NUMBER_FORMATTER = NumberFormat.getInstance();
 
     public static void println(String message) {
         System.out.printf(message);
@@ -41,7 +41,7 @@ public class OutputView {
             System.out.printf(
                     PRODUCT_FORMAT,
                     product.getName(),
-                    NUMBER.format(product.getPrice()),
+                    NUMBER_FORMATTER.format(product.getPrice()),
                     getQuantityMessage(product.getQuantity())
             );
         }
@@ -52,7 +52,7 @@ public class OutputView {
             System.out.printf(
                     PROMOTION_PRODUCT_FORMAT,
                     promotionProduct.getName(),
-                    NUMBER.format(promotionProduct.getPrice()),
+                    NUMBER_FORMATTER.format(promotionProduct.getPrice()),
                     getQuantityMessage(promotionProduct.getQuantity()),
                     promotionProduct.getPromotionName()
             );
@@ -96,14 +96,14 @@ public class OutputView {
                     RECEIPT_PURCHASE_INFO_FORMAT,
                     purchaseInfo.getProductName(),
                     purchaseInfo.getBuyCount(),
-                    NUMBER.format(purchaseInfo.getTotalPriceWithoutDiscount())
+                    NUMBER_FORMATTER.format(purchaseInfo.getTotalAmount())
             );
         }
     }
 
     private static void printFreePurchaseInfos(PurchaseInfos purchaseInfos) {
         System.out.printf(RECEIPT_FREE_START_MESSAGE);
-        for (PurchaseInfo purchaseInfo : purchaseInfos.toDiscountedList()) {
+        for (PurchaseInfo purchaseInfo : purchaseInfos.toPromotionDiscountedList()) {
             System.out.printf(
                     RECEIPT_FREE_PRODUCT_FORMAT,
                     purchaseInfo.getProductName(),
@@ -124,28 +124,28 @@ public class OutputView {
         System.out.printf(
                 RECEIPT_TOTAL_PRICE_FORMAT,
                 receipt.getTotalBuyCount(),
-                NUMBER.format(receipt.getTotalPriceWithoutDiscount())
+                NUMBER_FORMATTER.format(receipt.getTotalAmount())
         );
     }
 
     private static void printPromotionDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_PROMOTION_DISCOUNT_FORMAT,
-                NUMBER.format(receipt.getDiscountPrice())
+                NUMBER_FORMATTER.format(receipt.getPromotionDiscountAmount())
         );
     }
 
     private static void printMemberShipDiscount(Receipt receipt) {
         System.out.printf(
                 RECEIPT_MEMBERSHIP_DISCOUNT_FORMAT,
-                NUMBER.format(receipt.getMembershipDiscountAmount())
+                NUMBER_FORMATTER.format(receipt.getMembershipDiscountAmount())
         );
     }
 
     private static void printAmountOfPay(Receipt receipt) {
         System.out.printf(
                 RECEIPT_AMOUNT_OF_PAY_FORMAT,
-                NUMBER.format(receipt.getAmountOfPay())
+                NUMBER_FORMATTER.format(receipt.getAmountOfPay())
         );
     }
 }

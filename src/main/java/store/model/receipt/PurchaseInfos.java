@@ -13,9 +13,9 @@ public class PurchaseInfos {
         return List.copyOf(purchaseInfos);
     }
 
-    public List<PurchaseInfo> toDiscountedList() {
+    public List<PurchaseInfo> toPromotionDiscountedList() {
         return purchaseInfos.stream()
-                .filter(PurchaseInfo::isDiscounted)
+                .filter(PurchaseInfo::isPromotionDiscounted)
                 .toList();
     }
 
@@ -25,20 +25,22 @@ public class PurchaseInfos {
                 .sum();
     }
 
-    public int getTotalPriceWithoutDiscount() {
+    public int getTotalAmount() {
         return purchaseInfos.stream()
-                .mapToInt(PurchaseInfo::getTotalPriceWithoutDiscount)
+                .mapToInt(PurchaseInfo::getTotalAmount)
                 .sum();
     }
 
-    public int getDiscountedPrice() {
-        return toDiscountedList().stream()
-                .mapToInt(PurchaseInfo::getDiscountPrice)
+    public int getPromotionDiscountAmount() {
+        return toPromotionDiscountedList().stream()
+                .mapToInt(PurchaseInfo::getPromotionDiscountAmount)
                 .sum();
     }
 
-    public int getNotDiscountedPrice() {
-        return getTotalPriceWithoutDiscount()
-                - getDiscountedPrice();
+    public int getNotPromotionDiscountAppliedProductsAmount() {
+        return purchaseInfos.stream()
+                .filter(PurchaseInfo::isNotPromotionDiscounted)
+                .mapToInt(PurchaseInfo::getTotalAmount)
+                .sum();
     }
 }

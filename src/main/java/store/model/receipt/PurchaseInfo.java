@@ -16,27 +16,23 @@ public class PurchaseInfo extends Order {
         this(order.getProductName(), order.getBuyCount(), price, freeCount);
     }
 
-    public int getPrice() {
-        return price;
-    }
-
     public int getFreeCount() {
         return freeCount;
     }
 
-    public int getTotalPriceWithoutDiscount() {
+    public int getTotalAmount() {
         return buyCount * price;
     }
 
-    public int getDiscountPrice() {
+    public int getPromotionDiscountAmount() {
         return freeCount * price;
     }
 
-    public boolean isNotDiscounted() {
-        return freeCount == 0;
+    public boolean isPromotionDiscounted() {
+        return freeCount > 0;
     }
 
-    public boolean isDiscounted() {
-        return !isNotDiscounted();
+    public boolean isNotPromotionDiscounted() {
+        return !isPromotionDiscounted();
     }
 }

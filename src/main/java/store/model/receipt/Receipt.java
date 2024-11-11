@@ -16,12 +16,12 @@ public class Receipt {
         return purchaseInfos;
     }
 
-    public int getTotalPriceWithoutDiscount() {
-        return purchaseInfos.getTotalPriceWithoutDiscount();
+    public int getTotalAmount() {
+        return purchaseInfos.getTotalAmount();
     }
 
-    public int getDiscountPrice() {
-        return purchaseInfos.getDiscountedPrice();
+    public int getPromotionDiscountAmount() {
+        return purchaseInfos.getPromotionDiscountAmount();
     }
 
     public int getMembershipDiscountAmount() {
@@ -31,13 +31,13 @@ public class Receipt {
 
         return (int) Math.min(
                 MAX_MEMBERSHIP_DISCOUNT_AMOUNT,
-                MEMBERSHIP_DISCOUNT_PERCENTAGE * purchaseInfos.getNotDiscountedPrice()
+                MEMBERSHIP_DISCOUNT_PERCENTAGE * purchaseInfos.getNotPromotionDiscountAppliedProductsAmount()
         );
     }
 
     public int getAmountOfPay() {
-        return getTotalPriceWithoutDiscount()
-                - getDiscountPrice()
+        return getTotalAmount()
+                - getPromotionDiscountAmount()
                 - getMembershipDiscountAmount();
     }
 

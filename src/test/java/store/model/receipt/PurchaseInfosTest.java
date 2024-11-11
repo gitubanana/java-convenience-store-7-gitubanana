@@ -50,15 +50,15 @@ public class PurchaseInfosTest {
 
     @ParameterizedTest
     @DisplayName("총금액을 구할 수 있다.")
-    @MethodSource("getTotalPriceWithoutDiscountArguments")
+    @MethodSource("getTotalAmountArguments")
     void 총금액(List<PurchaseInfo> purchaseInfoList, final int expected) {
         PurchaseInfos purchaseInfos = new PurchaseInfos(purchaseInfoList);
 
-        assertThat(purchaseInfos.getTotalPriceWithoutDiscount())
+        assertThat(purchaseInfos.getTotalAmount())
                 .isEqualTo(expected);
     }
 
-    static Stream<Arguments> getTotalPriceWithoutDiscountArguments() {
+    static Stream<Arguments> getTotalAmountArguments() {
         return Stream.of(
                 Arguments.of(
                         List.of(
@@ -89,7 +89,7 @@ public class PurchaseInfosTest {
     void 할인된_금액(List<PurchaseInfo> purchaseInfoList, final int expected) {
         PurchaseInfos purchaseInfos = new PurchaseInfos(purchaseInfoList);
 
-        assertThat(purchaseInfos.getDiscountedPrice())
+        assertThat(purchaseInfos.getPromotionDiscountAmount())
                 .isEqualTo(expected);
     }
 
