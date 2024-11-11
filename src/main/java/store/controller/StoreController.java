@@ -30,7 +30,8 @@ public class StoreController {
         Store store = loadFilesAndMakeStore();
 
         while (true) {
-            takeOrdersAndSellProducts(store);
+            printWelcomeAndAllProducts(store);
+            takeOrdersAndPrintReceipt(store);
             if (answerToMoreOrders() == NO) {
                 break;
             }
@@ -48,18 +49,16 @@ public class StoreController {
         );
     }
 
-    private void takeOrdersAndSellProducts(Store store) {
-        printWelcomeAndAllProducts(store);
+    private void takeOrdersAndPrintReceipt(Store store) {
         Orders orders = readAvailableOrders(store);
 
         readAnswerToFreeGettableCount(store, orders);
         readAnswerToBuyProductsWithoutPromotion(store, orders);
-        Receipt receipt = new Receipt(
+
+        OutputView.printReceipt(new Receipt(
                 answerToMembershipDiscount() == YES,
                 sellAllProducts(store, orders)
-        );
-
-        OutputView.printReceipt(receipt);
+        ));
     }
 
     private void printWelcomeAndAllProducts(Store store) {
