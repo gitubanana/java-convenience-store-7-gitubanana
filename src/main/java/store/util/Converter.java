@@ -16,12 +16,10 @@ public class Converter {
     }
 
     public static LocalDateTime toLocalDateTime(String localDate, String dateFormat) {
-        return LocalDateTime.of(
-                LocalDate.parse(
+        return LocalDate.parse(
                         localDate,
                         DateTimeFormatter.ofPattern(dateFormat)
-                ),
-                LocalDateTime.MIN.toLocalTime()
-        );
+                )
+                .atStartOfDay();
     }
 }
